@@ -4,6 +4,7 @@ extern crate serde_json;
 use serde::Deserialize;
 use std::env;
 use std::fs;
+use std::io::Read;
 
 #[derive(Debug, Deserialize)]
 struct Entry {
@@ -11,22 +12,24 @@ struct Entry {
 }
 
 fn main() {
-    // Get the filename from the command line arguments
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        eprintln!("Usage: {} <path_to_json_file>", args[0]);
-        return;
-    }
-    let filename = &args[1];
+    let mut json_data = String::new();
 
-    // Read the file content
-    let json_data = match fs::read_to_string(filename) {
-        Ok(content) => content,
-        Err(err) => {
-            eprintln!("Failed to read {}: {}", filename, err);
-            return;
-        }
-    };
+    // Check if the user provided a filename as an argument
+    let args: Vec<String> = env::args().collect();
+    if args.len() >= 2 {
+        let filename = &args[1];
+        // Read the content from the provided file
+        match fs::read_to_string(filename) {
+            Ok(content) => json_data = content,
+            Err(err) => {
+                eprintln!("Failed to read {}: {}", filename, err);
+                return;
+            }
+        };
+    } else {
+        // If no filename was provided, read from standard input
+        std::io::stdin().read_to_string(&mut json_data).expect("Failed to read from stdin");
+    }
 
     // Deserialize the JSON string
     let entries: Vec<Entry> = match serde_json::from_str(&json_data) {
