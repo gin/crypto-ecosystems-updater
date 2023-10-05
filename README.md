@@ -10,7 +10,7 @@ curl -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <YOUR_GITHUB_TOKEN>" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/orgs/Stride-Labs/repos
+  https://api.github.com/orgs/Stride-Labs/repos\?direction\=desc\&per_page\=100
 | ./crypto-ecosystems-updater
 ```
 
@@ -21,7 +21,7 @@ curl -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <YOUR_GITHUB_TOKEN>" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/orgs/Stride-Labs/repos
+  https://api.github.com/orgs/Stride-Labs/repos\?direction\=desc\&per_page\=100
 ```
 
 2. Convert JSON to TOML

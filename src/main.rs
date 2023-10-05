@@ -9,6 +9,7 @@ use std::io::Read;
 #[derive(Debug, Deserialize)]
 struct Entry {
     html_url: String,
+    name: String,
 }
 
 fn main() {
@@ -32,13 +33,16 @@ fn main() {
     }
 
     // Deserialize the JSON string
-    let entries: Vec<Entry> = match serde_json::from_str(&json_data) {
+    let mut entries: Vec<Entry> = match serde_json::from_str(&json_data) {
         Ok(entries) => entries,
         Err(err) => {
             eprintln!("Failed to parse JSON: {}", err);
             return;
         }
     };
+
+    // Sort the entries by name
+    entries.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
 
     // Print the html_url values
     for entry in entries {
